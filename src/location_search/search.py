@@ -1,7 +1,7 @@
 from typing import Optional
 import requests
 
-from search.search_result import SearchResponse
+from location_search.search_result import SearchResponse
 
 
 def search_for_location(search_string: str) -> Optional[SearchResponse]:

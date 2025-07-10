@@ -1,4 +1,4 @@
-from src.location_search.search_result import Location
+from location_search.search_result import Location
 
 
 def print_location(location: Location):

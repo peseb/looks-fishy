@@ -1,5 +1,5 @@
-from src.helper.print_location import print_location
-from src.location_search.search_result import Location, Municipality, Point, Stedsnavn
+from helper.print_location import print_location
+from location_search.search_result import Location, Municipality, Point, Stedsnavn
 
 
 def test_print_location():
