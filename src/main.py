@@ -20,7 +20,7 @@ while fishing_location is None:
         while selected_index < 0 or selected_index > len(search_result):
             selected_index = int(
                 input(
-                    f"Invalid choice. Enter a number between {1}-{len(search_result)}"
+                    f"Invalid choice. Enter a number between {1}-{len(search_result)}."
                 )
             )
         fishing_location = search_result[selected_index - 1]
