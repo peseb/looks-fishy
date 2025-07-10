@@ -3,8 +3,8 @@ from typing import List
 
 
 class Point(BaseModel):
-    nord: int
-    øst: int
+    nord: float
+    øst: float
 
 
 class Municipality(BaseModel):

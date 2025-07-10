@@ -1,4 +1,5 @@
-from src.search.search import search_for_location
+from helper.print_location import print_location
+from location_search.search import search_for_location
 
 
 fishing_location = None
@@ -14,8 +15,8 @@ while fishing_location is None:
     total_hits = search_result.metadata.totaltAntallTreff
     if total_hits > 1:
         print("Found multiple locations. Select one from the list: ")
-        for index, res in enumerate(search_result):
-            print(f"{index + 1}. {res}")
+        for index, res in enumerate(search_result.navn):
+            print(f"{index + 1}. {print_location(res)}")
 
         selected_index = int(input("Enter the number matching your location"))
         while selected_index < 0 or selected_index > total_hits:
