@@ -1,2 +1,2 @@
-def search_for_location(userInput: str) -> list[str]:
+def search_for_location(search_string: str) -> list[str]:
     return []
