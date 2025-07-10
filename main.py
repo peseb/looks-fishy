@@ -25,6 +25,7 @@ while (fishing_location is None):
 
 # Location has been found
 print(f"Assessing conditions at {fishing_location}..")
-
+# TODO: Calculate fishing conditions
+# TODO: Print result for user
 
             
