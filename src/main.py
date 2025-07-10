@@ -14,7 +14,7 @@ while fishing_location is None:
     if len(search_result) > 1:
         print("Found multiple locations. Select one from the list: ")
         for index, res in enumerate(search_result):
-            print(f"{index+1}. {res}")
+            print(f"{index + 1}. {res}")
 
         selected_index = int(input("Enter the number matching your location"))
         while selected_index < 0 or selected_index > len(search_result):
