@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import time
 from get_fishing_location import get_fishing_location
+from helper.calculate_fishing_conditions import calculate_fishing_conditions
 from helper.is_data_for_date import is_data_for_date
 from weather_forecast.get_weather_forecast import get_weather_forecast
 
@@ -29,8 +30,8 @@ def main():
             "*********************************************************************************"
         )
         print(f"Date: {current_date.date()}")
-        # TODO: Calculate fishing conditions
-        # TODO: Print result for user
+        fishing_condition = calculate_fishing_conditions(day_info)
+        print(f"Fishing condition: {fishing_condition}")
 
         # Move to next day
         next_day = timedelta(days=1)
