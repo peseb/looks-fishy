@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import time
 from get_fishing_location import get_fishing_location
 from weather_forecast.get_weather_forecast import get_weather_forecast
 from weather_forecast.weather_response import Timeserie
@@ -19,7 +20,6 @@ def main():
         print("UhOh, no weatherdata found. Unable to determine conditions ")
         return
 
-    print("Weather forecast: ", weather_forecast)
     current_date = datetime.now()
     while True:
         day_info = list(
@@ -31,13 +31,17 @@ def main():
         if len(day_info) == 0:
             break
 
-        print("Assessing date: ", current_date)
+        print(
+            "*********************************************************************************"
+        )
+        print(f"Date: {current_date.date()}")
         # TODO: Calculate fishing conditions
         # TODO: Print result for user
 
         # Move to next day
         next_day = timedelta(days=1)
         current_date = current_date + next_day
+        time.sleep(1)
 
     print("Done!")
 
