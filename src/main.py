@@ -1,14 +1,8 @@
 from datetime import datetime, timedelta
 import time
 from get_fishing_location import get_fishing_location
+from helper.is_data_for_date import is_data_for_date
 from weather_forecast.get_weather_forecast import get_weather_forecast
-from weather_forecast.weather_response import Timeserie
-
-
-def is_data_for_date(timeserie: Timeserie, date: datetime):
-    date_format = "%Y-%m-%dT%H:%M:%SZ"
-    timeserie_date = datetime.strptime(timeserie.time, date_format)
-    return timeserie_date.date() == date.date()
 
 
 def main():
@@ -24,7 +18,7 @@ def main():
     while True:
         day_info = list(
             filter(
-                lambda x: is_data_for_date(x, current_date),
+                lambda x: is_data_for_date(x.time, current_date),
                 weather_forecast.properties.timeseries,
             )
         )
