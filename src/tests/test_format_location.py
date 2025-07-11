@@ -1,4 +1,4 @@
-from helper.print_location import print_location
+from helper.format_location import format_location
 from location_search.search_result import Location, Municipality, Point, Stedsnavn
 
 
@@ -13,5 +13,5 @@ def test_print_location():
         stedsnavn=[place],
     )
 
-    res = print_location(loc)
-    assert res == "Trondheim (Tettsted, 5001 Trondheim)"
+    formatted = format_location(loc)
+    assert formatted == "Trondheim (Tettsted, 5001 Trondheim)"
