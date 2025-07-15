@@ -98,28 +98,52 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
 
     # Wind: Vindretningen har stor påvirkning på ørretfiske. Generelt sett er det slik at vind fra sørøst og øst er gunstigere enn vind fra nord. Nordavind kan føre til at fisken blir mindre aktiv, da den kan føre med seg kaldere luft og redusere insektaktiviteten. Likevel er det ingen regel uten unntak, og vindforholdene kan variere fra vann til vann.
     # Documentation for wind direction: https://api.met.no/weatherapi/locationforecast/2.0/documentation
+
+    # Wind from north not so good
     def wind_from_north(serie: Timeserie):
         return serie.data.instant.details.wind_from_direction < 90
 
-    def wind_from_southeast(serie: Timeserie):
-        return (
-            serie.data.instant.details.wind_from_direction > 90
-            and serie.data.instant.details.wind_from_direction <= 180
-        )
-
-    # Wind from north not so good
     hours_north_wind = has_instant_condition(
         day_info, wind_from_north, "wind from north"
     )
     bad_conditions += hours_north_wind
 
     # Wind from east or southeast good
+    def wind_from_southeast(serie: Timeserie):
+        return (
+            serie.data.instant.details.wind_from_direction > 90
+            and serie.data.instant.details.wind_from_direction <= 180
+        )
+
     hours_southeast_wind = has_instant_condition(
         day_info, wind_from_southeast, "wind from southeast"
     )
     good_conditions += hours_southeast_wind
 
-    # Wind: Vindstille: Kan gjøre det vanskeligere å fiske med flue eller sluk, da fisken lettere blir skremt av kast og uro
+    # Wind: no wind not good
+    def no_wind(serie: Timeserie):
+        return serie.data.instant.details.wind_speed <= 0.5
+
+    hours_no_wind = has_instant_condition(day_info, no_wind, "no wind")
+    bad_conditions += hours_no_wind
+
+    # Wind: too much wind not good
+    def to_much_wind(serie: Timeserie):
+        return serie.data.instant.details.wind_speed >= 10
+
+    hours_to_much_wind = has_instant_condition(day_info, to_much_wind, "too much wind")
+    bad_conditions += hours_to_much_wind
+
+    # Wind: a little windy good
+    def ideal_wind(serie: Timeserie):
+        return (
+            serie.data.instant.details.wind_speed >= 1
+            and serie.data.instant.details.wind_speed <= 5
+        )
+
+    hours_ideal_wind = has_instant_condition(day_info, ideal_wind, "ideal wind")
+    good_conditions += hours_ideal_wind
+
     # Vann- og lufttemperatur: Ørreten trives best i kjøligere vann, ideelt mellom 10 og 15°C, men er fortsatt aktiv i vann opp til 20°C.
     # Kjølige morgener eller kvelder, spesielt etter varme dager, kan gi gode forhold.
     # Tidspunkt på dagen:
