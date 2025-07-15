@@ -32,8 +32,15 @@ def main():
         print(f"Date: {current_date.date()}")
         fishing_condition = calculate_fishing_conditions(day_info)
         print(f"Fishing condition: {fishing_condition}")
+        if fishing_condition < 1:
+            print("Not soo good conditions. Try another date..")
+        elif fishing_condition < 2:
+            print("Decent conditions")
+        elif fishing_condition < 3:
+            print("Good conditions")
+        else:
+            print("Ideal conditions")
 
-        # Move to next day
         next_day = timedelta(days=1)
         current_date = current_date + next_day
         time.sleep(1)

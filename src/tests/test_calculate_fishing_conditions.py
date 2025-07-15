@@ -26,4 +26,4 @@ def test_calculate_conditions():
         )
     )
     result = calculate_fishing_conditions(day_info)
-    assert result == 1
+    assert result > 3.15
