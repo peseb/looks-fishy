@@ -49,19 +49,16 @@ def has_instant_condition(
     check_condition: Callable[[Timeserie], bool],
     condition_description: str,
 ):
-    result = (
-        len(
-            list(
-                filter(
-                    lambda x: check_condition(x),
-                    day_info,
-                )
+    result = len(
+        list(
+            filter(
+                lambda x: check_condition(x),
+                day_info,
             )
         )
-        > 0
     )
 
-    print(f"Has {condition_description}: {result}")
+    print(f"Has {condition_description}: {result} hours")
     return result
 
 
@@ -69,6 +66,8 @@ def has_instant_condition(
 def calculate_fishing_conditions(day_info: List[Timeserie]):
     good_conditions = 1
     bad_conditions = 1
+
+    ## General conditions ##
 
     # Light rain is good
     has_light_rain = day_has_condition(day_info, "lightrain")
@@ -95,6 +94,8 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
     if has_thunder:
         bad_conditions += 1
 
+    ## Hourly conditions ##
+
     # Wind: Vindretningen har stor påvirkning på ørretfiske. Generelt sett er det slik at vind fra sørøst og øst er gunstigere enn vind fra nord. Nordavind kan føre til at fisken blir mindre aktiv, da den kan føre med seg kaldere luft og redusere insektaktiviteten. Likevel er det ingen regel uten unntak, og vindforholdene kan variere fra vann til vann.
     # Documentation for wind direction: https://api.met.no/weatherapi/locationforecast/2.0/documentation
     def wind_from_north(serie: Timeserie):
@@ -106,18 +107,17 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
             and serie.data.instant.details.wind_from_direction <= 180
         )
 
-    has_north_wind = has_instant_condition(day_info, wind_from_north, "wind from north")
-    has_southeast_wind = has_instant_condition(
-        day_info, wind_from_southeast, "wind from southeast"
-    )
-
     # Wind from north not so good
-    if has_north_wind:
-        bad_conditions += 1
+    hours_north_wind = has_instant_condition(
+        day_info, wind_from_north, "wind from north"
+    )
+    bad_conditions += hours_north_wind
 
     # Wind from east or southeast good
-    if has_southeast_wind:
-        good_conditions += 1
+    hours_southeast_wind = has_instant_condition(
+        day_info, wind_from_southeast, "wind from southeast"
+    )
+    good_conditions += hours_southeast_wind
 
     # Wind: Vindstille: Kan gjøre det vanskeligere å fiske med flue eller sluk, da fisken lettere blir skremt av kast og uro
     # Vann- og lufttemperatur: Ørreten trives best i kjøligere vann, ideelt mellom 10 og 15°C, men er fortsatt aktiv i vann opp til 20°C.
