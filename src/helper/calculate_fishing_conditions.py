@@ -44,6 +44,7 @@ def day_has_condition(day_info: List[Timeserie], condition: str):
     return result
 
 
+# Possible conditions can be found here: https://github.com/metno/weathericons/tree/main/weather
 def calculate_fishing_conditions(day_info: List[Timeserie]):
     good_conditions = 1
     bad_conditions = 1
@@ -54,16 +55,27 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
         good_conditions += 1
 
     # Cloud cover is good
+    is_cloudy = day_has_condition(day_info, "cloud")
+    if is_cloudy:
+        good_conditions += 1
+
     # Direct sun not so good
     has_direct_sun = day_has_condition(day_info, "clearsky_day")
     if has_direct_sun:
         bad_conditions += 1
 
-    # Storm/heavy rain not so good?
-    # Fishing before storm is good
+    # heavy rain not so good?
+    has_heavy_rain = day_has_condition(day_info, "heavyrain")
+    if has_heavy_rain:
+        bad_conditions += 1
+
+    # thunder not so good?
+    has_thunder = day_has_condition(day_info, "thunder")
+    if has_thunder:
+        bad_conditions += 1
+
     # Wind: Vindretningen har stor påvirkning på ørretfiske. Generelt sett er det slik at vind fra sørøst og øst er gunstigere enn vind fra nord. Nordavind kan føre til at fisken blir mindre aktiv, da den kan føre med seg kaldere luft og redusere insektaktiviteten. Likevel er det ingen regel uten unntak, og vindforholdene kan variere fra vann til vann.
     # Wind: Vindstille: Kan gjøre det vanskeligere å fiske med flue eller sluk, da fisken lettere blir skremt av kast og uro
-    # Vær oppmerksom på trykk: Fallende lufttrykk rett før regn kan også føre til økt hugg
     # Vann- og lufttemperatur: Ørreten trives best i kjøligere vann, ideelt mellom 10 og 15°C, men er fortsatt aktiv i vann opp til 20°C.
     # Kjølige morgener eller kvelder, spesielt etter varme dager, kan gi gode forhold.
     # Tidspunkt på dagen:
