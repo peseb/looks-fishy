@@ -1,11 +1,23 @@
 from datetime import datetime, timedelta
 from typing import Any, Iterable
 
+from colorama import Fore, Style
 from tabulate import tabulate
 from get_fishing_location import get_fishing_location
 from helper.calculate_fishing_conditions import calculate_fishing_conditions
 from helper.is_data_for_date import is_data_for_date
 from weather_forecast.get_weather_forecast import get_weather_forecast
+
+
+def color_condition(condition: float) -> str:
+    if condition < 1:
+        return Fore.RED + str(condition) + Style.RESET_ALL
+    elif condition < 2:
+        return Fore.YELLOW + str(condition) + Style.RESET_ALL
+    elif condition < 3:
+        return Fore.LIGHTGREEN_EX + str(condition) + Style.RESET_ALL
+
+    return Fore.GREEN + str(condition) + Style.RESET_ALL
 
 
 def main():
@@ -42,7 +54,7 @@ def main():
             print("Good conditions")
         else:
             print("Ideal conditions")
-        conditions.append([current_date.date(), fishing_condition])
+        conditions.append([current_date.date(), color_condition(fishing_condition)])
         next_day = timedelta(days=1)
         current_date = current_date + next_day
 
