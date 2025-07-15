@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
-import time
+from typing import Any, Iterable
+
+from tabulate import tabulate
 from get_fishing_location import get_fishing_location
 from helper.calculate_fishing_conditions import calculate_fishing_conditions
 from helper.is_data_for_date import is_data_for_date
@@ -14,7 +16,7 @@ def main():
     if weather_forecast is None:
         print("UhOh, no weatherdata found. Unable to determine conditions ")
         return
-
+    conditions: Iterable[Iterable[Any]] = []
     current_date = datetime.now()
     while True:
         day_info = list(
@@ -40,12 +42,12 @@ def main():
             print("Good conditions")
         else:
             print("Ideal conditions")
-
+        conditions.append([current_date.date(), fishing_condition])
         next_day = timedelta(days=1)
         current_date = current_date + next_day
-        time.sleep(1)
 
-    print("Done!")
+    print("Done! Here's a summary:")
+    print(tabulate(conditions, headers=["Date", "Condition"]))
 
 
 if __name__ == "__main__":
