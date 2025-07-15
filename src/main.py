@@ -9,26 +9,26 @@ from helper.is_data_for_date import is_data_for_date
 from weather_forecast.get_weather_forecast import get_weather_forecast
 
 
-def color_condition(condition: float) -> str:
+def color_condition(condition: float, condition_str: str) -> str:
     if condition < 1:
-        return Fore.RED + str(condition) + Style.RESET_ALL
+        return Fore.RED + condition_str + Style.RESET_ALL
     elif condition < 2:
-        return Fore.YELLOW + str(condition) + Style.RESET_ALL
+        return Fore.YELLOW + condition_str + Style.RESET_ALL
     elif condition < 3:
-        return Fore.LIGHTGREEN_EX + str(condition) + Style.RESET_ALL
+        return Fore.LIGHTGREEN_EX + condition_str + Style.RESET_ALL
 
-    return Fore.GREEN + str(condition) + Style.RESET_ALL
+    return Fore.GREEN + condition_str + Style.RESET_ALL
 
 
 def get_condition_summary(fishing_condition: float) -> str:
     if fishing_condition < 1:
-        return "Not soo good conditions. Try another date.."
+        return "Bad"
     elif fishing_condition < 2:
-        return "Decent conditions"
+        return "Decent"
     elif fishing_condition < 3:
-        return "Good conditions"
+        return "Good"
 
-    return "Ideal conditions"
+    return "Excellent"
 
 
 def main():
@@ -56,11 +56,14 @@ def main():
         )
         print(f"Date: {current_date.date()}")
         fishing_condition = calculate_fishing_conditions(day_info)
-        print(
-            f"\nFishing condition: {fishing_condition} ({get_condition_summary(fishing_condition)})"
+        condition_str = (
+            f"{fishing_condition:.1f} ({get_condition_summary(fishing_condition)})"
         )
+        print(f"\nFishing condition: {condition_str})")
 
-        conditions.append([current_date.date(), color_condition(fishing_condition)])
+        conditions.append(
+            [current_date.date(), color_condition(fishing_condition, condition_str)]
+        )
         next_day = timedelta(days=1)
         current_date = current_date + next_day
         print("\n\n")
