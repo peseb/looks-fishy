@@ -10,17 +10,38 @@ def nexthours_has_condition(nextHours: Optional[NextHours], condition: str):
 
 
 def day_has_condition(day_info: List[Timeserie], condition: str):
-    return (
-        filter(
-            lambda x: nexthours_has_condition(x.data.next_1_hours, condition), day_info
+    result = (
+        len(
+            list(
+                filter(
+                    lambda x: nexthours_has_condition(x.data.next_1_hours, condition),
+                    day_info,
+                )
+            )
         )
-        or filter(
-            lambda x: nexthours_has_condition(x.data.next_6_hours, condition), day_info
+        > 0
+        or len(
+            list(
+                filter(
+                    lambda x: nexthours_has_condition(x.data.next_6_hours, condition),
+                    day_info,
+                )
+            )
         )
-        or filter(
-            lambda x: nexthours_has_condition(x.data.next_12_hours, condition), day_info
+        > 0
+        or len(
+            list(
+                filter(
+                    lambda x: nexthours_has_condition(x.data.next_12_hours, condition),
+                    day_info,
+                )
+            )
         )
+        > 0
     )
+
+    print(f"Has {condition}: {result}")
+    return result
 
 
 def calculate_fishing_conditions(day_info: List[Timeserie]):
@@ -48,4 +69,5 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
     # Tidspunkt på dagen:
     # Tidlig morgen og sen kveld er ofte de beste tidspunktene, da ørreten er mest aktiv i grålysningen og ved solnedgang, og ofte jakter nær overflaten.
     # På dagtid, når temperaturen er på sitt høyeste, kan ørreten være mer passiv og søke dypere vann.
+
     return good_conditions / bad_conditions
