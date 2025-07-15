@@ -145,9 +145,28 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
     good_conditions += hours_ideal_wind
 
     # Vann- og lufttemperatur: Ørreten trives best i kjøligere vann, ideelt mellom 10 og 15°C, men er fortsatt aktiv i vann opp til 20°C.
-    # Kjølige morgener eller kvelder, spesielt etter varme dager, kan gi gode forhold.
-    # Tidspunkt på dagen:
-    # Tidlig morgen og sen kveld er ofte de beste tidspunktene, da ørreten er mest aktiv i grålysningen og ved solnedgang, og ofte jakter nær overflaten.
-    # På dagtid, når temperaturen er på sitt høyeste, kan ørreten være mer passiv og søke dypere vann.
+    # Good temp: Between 10-20
+    def good_temperature(serie: Timeserie):
+        return (
+            serie.data.instant.details.air_temperature >= 10
+            and serie.data.instant.details.air_temperature <= 20
+        )
+
+    hours_good_temperature = has_instant_condition(
+        day_info, good_temperature, "good temperature"
+    )
+    good_conditions += hours_good_temperature
+
+    # Bad temp: Outside of this range
+    def bad_temperature(serie: Timeserie):
+        return (
+            serie.data.instant.details.air_temperature < 10
+            and serie.data.instant.details.air_temperature > 20
+        )
+
+    hours_bad_temperature = has_instant_condition(
+        day_info, bad_temperature, "bad temperature"
+    )
+    bad_conditions += hours_bad_temperature
 
     return good_conditions / bad_conditions
