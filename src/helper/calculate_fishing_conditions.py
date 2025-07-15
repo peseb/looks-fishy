@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Callable, List, Optional
 from weather_forecast.weather_response import NextHours, Timeserie
 
 
@@ -44,6 +44,27 @@ def day_has_condition(day_info: List[Timeserie], condition: str):
     return result
 
 
+def has_instant_condition(
+    day_info: List[Timeserie],
+    check_condition: Callable[[Timeserie], bool],
+    condition_description: str,
+):
+    result = (
+        len(
+            list(
+                filter(
+                    lambda x: check_condition(x),
+                    day_info,
+                )
+            )
+        )
+        > 0
+    )
+
+    print(f"Has {condition_description}: {result}")
+    return result
+
+
 # Possible conditions can be found here: https://github.com/metno/weathericons/tree/main/weather
 def calculate_fishing_conditions(day_info: List[Timeserie]):
     good_conditions = 1
@@ -76,37 +97,18 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
 
     # Wind: Vindretningen har stor påvirkning på ørretfiske. Generelt sett er det slik at vind fra sørøst og øst er gunstigere enn vind fra nord. Nordavind kan føre til at fisken blir mindre aktiv, da den kan føre med seg kaldere luft og redusere insektaktiviteten. Likevel er det ingen regel uten unntak, og vindforholdene kan variere fra vann til vann.
     # Documentation for wind direction: https://api.met.no/weatherapi/locationforecast/2.0/documentation
-    def is_wind_from_north(wind_dir: float):
-        return wind_dir < 90
+    def wind_from_north(serie: Timeserie):
+        return serie.data.instant.details.wind_from_direction < 90
 
-    def is_wind_from_southeast(wind_dir: float):
-        return wind_dir >= 90 and wind_dir <= 180
+    def wind_from_southeast(serie: Timeserie):
+        return (
+            serie.data.instant.details.wind_from_direction > 90
+            and serie.data.instant.details.wind_from_direction <= 180
+        )
 
-    has_north_wind = (
-        len(
-            list(
-                filter(
-                    lambda x: is_wind_from_north(
-                        x.data.instant.details.wind_from_direction
-                    ),
-                    day_info,
-                )
-            )
-        )
-        > 0
-    )
-    has_southeast_wind = (
-        len(
-            list(
-                filter(
-                    lambda x: is_wind_from_southeast(
-                        x.data.instant.details.wind_from_direction
-                    ),
-                    day_info,
-                )
-            )
-        )
-        > 0
+    has_north_wind = has_instant_condition(day_info, wind_from_north, "wind from north")
+    has_southeast_wind = has_instant_condition(
+        day_info, wind_from_southeast, "wind from southeast"
     )
 
     # Wind from north not so good
