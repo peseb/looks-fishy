@@ -20,6 +20,17 @@ def color_condition(condition: float) -> str:
     return Fore.GREEN + str(condition) + Style.RESET_ALL
 
 
+def get_condition_summary(fishing_condition: float) -> str:
+    if fishing_condition < 1:
+        return "Not soo good conditions. Try another date.."
+    elif fishing_condition < 2:
+        return "Decent conditions"
+    elif fishing_condition < 3:
+        return "Good conditions"
+
+    return "Ideal conditions"
+
+
 def main():
     fishing_location = get_fishing_location()
     print(f"Assessing conditions at {fishing_location}..")
@@ -45,18 +56,14 @@ def main():
         )
         print(f"Date: {current_date.date()}")
         fishing_condition = calculate_fishing_conditions(day_info)
-        print(f"Fishing condition: {fishing_condition}")
-        if fishing_condition < 1:
-            print("Not soo good conditions. Try another date..")
-        elif fishing_condition < 2:
-            print("Decent conditions")
-        elif fishing_condition < 3:
-            print("Good conditions")
-        else:
-            print("Ideal conditions")
+        print(
+            f"\nFishing condition: {fishing_condition} ({get_condition_summary(fishing_condition)})"
+        )
+
         conditions.append([current_date.date(), color_condition(fishing_condition)])
         next_day = timedelta(days=1)
         current_date = current_date + next_day
+        print("\n\n")
 
     print("Done! Here's a summary:")
     print(tabulate(conditions, headers=["Date", "Condition"]))
