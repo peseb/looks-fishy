@@ -75,6 +75,23 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
         bad_conditions += 1
 
     # Wind: Vindretningen har stor påvirkning på ørretfiske. Generelt sett er det slik at vind fra sørøst og øst er gunstigere enn vind fra nord. Nordavind kan føre til at fisken blir mindre aktiv, da den kan føre med seg kaldere luft og redusere insektaktiviteten. Likevel er det ingen regel uten unntak, og vindforholdene kan variere fra vann til vann.
+    # Documentation for wind direction: https://api.met.no/weatherapi/locationforecast/2.0/documentation
+    has_north_wind = False
+    has_southeast_wind = False
+    for info in day_info:
+        wind_direction = info.data.instant.details.wind_from_direction
+        if wind_direction < 90:
+            # Northwind -> Not so good
+            has_north_wind = True
+        elif wind_direction < 180:
+            # Southeast good
+            has_southeast_wind = True
+    if has_north_wind:
+        bad_conditions += 1
+
+    if has_southeast_wind:
+        good_conditions += 1
+
     # Wind: Vindstille: Kan gjøre det vanskeligere å fiske med flue eller sluk, da fisken lettere blir skremt av kast og uro
     # Vann- og lufttemperatur: Ørreten trives best i kjøligere vann, ideelt mellom 10 og 15°C, men er fortsatt aktiv i vann opp til 20°C.
     # Kjølige morgener eller kvelder, spesielt etter varme dager, kan gi gode forhold.
