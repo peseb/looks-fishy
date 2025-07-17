@@ -1,7 +1,11 @@
 from datetime import datetime
 
 
-def is_data_for_date(timeserie_date: str, date: datetime):
+def date_from_str(date_str: str):
     date_format = "%Y-%m-%dT%H:%M:%SZ"
-    parsed_date = datetime.strptime(timeserie_date, date_format)
+    return datetime.strptime(date_str, date_format)
+
+
+def is_data_for_date(timeserie_date: str, date: datetime):
+    parsed_date = date_from_str(timeserie_date)
     return parsed_date.date() == date.date()
