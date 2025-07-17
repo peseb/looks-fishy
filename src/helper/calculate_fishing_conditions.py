@@ -124,8 +124,8 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
     # Good temp: Between 10-20
     def good_temperature(serie: Timeserie):
         return (
-            serie.data.instant.details.air_temperature >= 10
-            and serie.data.instant.details.air_temperature <= 20
+            serie.data.instant.details.air_temperature >= 15
+            and serie.data.instant.details.air_temperature <= 25
         )
 
     hours_good_temperature = has_instant_condition(
@@ -136,8 +136,8 @@ def calculate_fishing_conditions(day_info: List[Timeserie]):
     # Bad temp: Outside of 10-20
     def bad_temperature(serie: Timeserie):
         return (
-            serie.data.instant.details.air_temperature < 10
-            or serie.data.instant.details.air_temperature > 20
+            serie.data.instant.details.air_temperature < 15
+            or serie.data.instant.details.air_temperature > 25
         )
 
     hours_bad_temperature = has_instant_condition(
