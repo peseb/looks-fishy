@@ -11,7 +11,8 @@ from weather_forecast.get_weather_forecast import get_weather_forecast
 
 def main():
     fishing_location = get_fishing_location()
-    print(f"Assessing conditions at {fishing_location}..")
+    location_name = fishing_location.stedsnavn[0].skrivemåte
+    print(f"Assessing conditions at {location_name}..\n\n")
 
     weather_forecast = get_weather_forecast(fishing_location)
     if weather_forecast is None:
@@ -49,7 +50,7 @@ def main():
         current_date = current_date + next_day
         print("\n\n")
 
-    print("Done! Here's a summary:")
+    print(f"Done! Here´s the forecast for {location_name}:")
     print(tabulate(conditions, headers=["Date", "Condition"]))
 
 
