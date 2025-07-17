@@ -1,4 +1,4 @@
-# Looks Fishy! 
+# Looks Fishy 🎣
 
 ## Description
 A simple program that calculates and displays fishing conditions at a location in Norway. The fishing condition is calculated based on what is considered good and bad weather when fishing in freshwater.
