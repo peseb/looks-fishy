@@ -29,4 +29,13 @@ The program does not consider or find the best time on the day, it just checks a
 ## Usage
 1. Run command `uv run src/main.py`
 
+## Example
+### Calculation of fishing conditions at Stuggusjøen (Tydal, Norway):
 
+![User is prompted for location](user_prompt.png)
+
+### Conditions will be printed for each day:
+![Conditinos for a day](day_conditions.png)
+
+### A summary is printed at the end:
+![Summary of all days](summary.png)
